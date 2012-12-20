@@ -7,13 +7,33 @@
         android:id="@+id/layout_title" 
         android:layout_height="wrap_content" 
         android:layout_alignParentTop="true"/>
-
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_title"
-        android:layout_centerHorizontal="true">
-    </ListView>
+	
+	<FrameLayout android:id="@+id/layout_content" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_below="@+id/layout_title">
+	    <LinearLayout
+	        android:id="@+id/animation_layout_one"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical">
+	        <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:text="Splash"
+		        android:textSize="25sp" />
+	    </LinearLayout>
+	
+	    <!-- To make LinearLayout clickable to trigger onContentTouchedWhenOpening()  -->
+	    <LinearLayout
+	        android:id="@+id/animation_layout_two"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical"
+	        android:visibility="gone">
+	    </LinearLayout>
+	</FrameLayout>
 	
 </RelativeLayout>
