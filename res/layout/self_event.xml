@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:text="Title" />
     <ImageView android:id="@+id/im_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="295dp"
+        android:layout_height="166dp"
         android:src="@drawable/ic_launcher"/>
     
     <TextView
@@ -23,7 +23,7 @@
         android:text="Content" />
     
     <TextView
-        android:id="@+id/tv_self_event_content"
+        android:id="@+id/tv_self_event_more"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"

@@ -1,5 +1,7 @@
 package com.krislq.history.activity;
 
+import com.krislq.history.view.ContentTitleView;
+
 import android.view.View;
 
 public interface TabTitleClickListener {

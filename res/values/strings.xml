@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">HistoryOfToday</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="more">More</string>
+    <string name="title_big_event">Big Event</string>
+    <string name="title_birth">出生</string>
+    <string name="title_die">近世</string>
 
 </resources>

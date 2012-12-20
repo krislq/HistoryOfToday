@@ -14,9 +14,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#d2d2d2"
         android:layout_toLeftOf="@+id/im_right"
         android:layout_toRightOf="@+id/im_left">
-	    
     </LinearLayout>
     <ImageView android:id="@+id/im_right"
         android:layout_width="wrap_content"

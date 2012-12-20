@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 
 import com.krislq.history.R;
 import com.krislq.history.json.ContentJson;
@@ -23,11 +24,19 @@ import com.krislq.history.json.HistoryJson;
 import com.krislq.history.manager.HttpManager;
 import com.krislq.history.manager.ITransaction;
 import com.krislq.history.util.DateUtil;
+import com.krislq.history.util.HistoryUtil;
 import com.krislq.history.util.L;
+import com.krislq.history.view.ContentSelftEventView;
+import com.krislq.history.view.ContentTitleView;
 
 public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private static final int 		HANDLER_SHOW_DATA = 0x0001;
 	private static final int 		HANDLER_SHOW_ERROR = 0x0002;
+	private static final int 		HANDLER_CHANGE_SELF_EVENT = 0x0003;
+	private static final int 		HANDLER_CHANGE_LIST_EVENT = 0x0004;
+	
+	private static final int 		DISPLAY_SELF_EVENT = 0x0000;
+	private static final int 		DISPLAY_LIST_EVENT = 0x0001;
 	private Button			mBtnShare;
 	public 	ObjectMapper 	mObjectMapper = null;
 	private HistoryJson 	mResponseObject = null;
@@ -35,6 +44,10 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private ViewGroup		mGroundOne;
 	private ViewGroup		mGroundTwo;
 	
+	private int 			mSelectSelfEventIndex = 0;
+	private int 			mSelectListEventIndex = 0;
+	private int 			mDisplayIndex = DISPLAY_SELF_EVENT;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,6 +68,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
 	private void getHistoryData(String date)
 	{
 		//http://baike.baidu.com/app/historyontoday?asyn=1&date=12-19
@@ -66,40 +80,72 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		httpManager.start();
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_share:
-			
-			break;
-
-		default:
-			break;
+//	@Override
+//	public void onClick(View v) {
+//		
+//		}
+//	}
+	
+	public void initLayoutPosition() {
+		LayoutParams twoParams = (LayoutParams) mGroundTwo.getLayoutParams();
+		if(mDisplayIndex == DISPLAY_SELF_EVENT) {
+			twoParams.topMargin = HistoryUtil.getSceenHeight(mContext) -400;
 		}
+		mGroundTwo.setLayoutParams(twoParams);
+		mGroundTwo.requestLayout();
 	}
+	
 	private Handler mHandler = new Handler(){
 
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case HANDLER_SHOW_DATA:
-				List<ContentJson> content = mResponseObject.getListEvent().getSelfEvent();
-				List<String> titles = fitTitles(content);
-				ContentTitleView titleView = new ContentTitleView(HistoryActivity.this);
-				titleView.setmTitles(titles);
-				titleView.setOnClickListener(new TabTitleClickListener() {
-					
+				mHandler.obtainMessage(HANDLER_CHANGE_SELF_EVENT, mSelectSelfEventIndex, 0).sendToTarget();
+				mHandler.obtainMessage(HANDLER_CHANGE_LIST_EVENT, mSelectListEventIndex, 0).sendToTarget();
+				initLayoutPosition();
+				break;
+			case HANDLER_CHANGE_SELF_EVENT:
+				int selectSelfIndex = msg.arg1;
+				List<ContentJson> selfEvenContents = mResponseObject.getListEvent().getSelfEvent();
+				List<String> selfEventTitles = fitTitles(selfEvenContents);
+				ContentTitleView selfEventTitleView = new ContentTitleView(HistoryActivity.this);
+				selfEventTitleView.setTitles(selfEventTitles);
+				selfEventTitleView.setSelectIndex(selectSelfIndex);
+				selfEventTitleView.setOnClickListener(new TabTitleClickListener() {
 					@Override
 					public void onTitleClick(ContentTitleView contentTitleView, View view,
 							int index) {
 						L.e("Index:"+index);
+						mHandler.obtainMessage(HANDLER_CHANGE_SELF_EVENT, index, 0).sendToTarget();
 					}
 				});
-				View selfEventTitleView = titleView.generateTitle();
 				mGroundOne.removeAllViews();
-				mGroundOne.addView(selfEventTitleView);
+				mGroundOne.addView(selfEventTitleView.generateTitle());
 				L.e("OK");
-				
+				ContentJson content = selfEvenContents.get(selectSelfIndex);
+				ContentSelftEventView eventView = new ContentSelftEventView(HistoryActivity.this);
+				eventView.setContent(content);
+				mGroundOne.addView(eventView.generateContentView());
+				break;
+			case HANDLER_CHANGE_LIST_EVENT:
+				int selectListIndex = msg.arg1;
+				List<ContentJson> selEvenContents = mResponseObject.getListEvent().getSelfEvent();
+				List<String> listEventTitles = fitListEventTitles();
+				ContentTitleView listEventTitleView = new ContentTitleView(HistoryActivity.this);
+				listEventTitleView.setTitles(listEventTitles);
+				listEventTitleView.setSelectIndex(mSelectListEventIndex);
+				listEventTitleView.setOnClickListener(new TabTitleClickListener() {
+					@Override
+					public void onTitleClick(ContentTitleView contentTitleView, View view,
+							int index) {
+						L.e("Index:"+index);
+						mHandler.obtainMessage(HANDLER_CHANGE_LIST_EVENT, index, 0).sendToTarget();
+					}
+				});
+				mGroundTwo.removeAllViews();
+				mGroundTwo.addView(listEventTitleView.generateTitle());
+				L.e("OK");
 				break;
 			case HANDLER_SHOW_ERROR:
 				
@@ -117,6 +163,13 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		for(ContentJson json :content) {
 			titles.add(json.getTitle());
 		}
+		return titles;
+	}
+	private List<String> fitListEventTitles() {
+		List<String> titles = new ArrayList<String>(3);
+		titles.add(getString(R.string.title_big_event));
+		titles.add(getString(R.string.title_birth));
+		titles.add(getString(R.string.title_die));
 		return titles;
 	}
 	public ITransaction getHistoryTransaction = new ITransaction() {
@@ -138,4 +191,16 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 			mHandler.obtainMessage(HANDLER_SHOW_ERROR).sendToTarget();
 		}
 	};
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.btn_share:
+			break;
+
+		default:
+			break;
+		}
+	}
 }

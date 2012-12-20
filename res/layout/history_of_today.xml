@@ -16,14 +16,9 @@
 	        android:id="@+id/animation_layout_one"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:orientation="vertical">
-	        <TextView
-		        android:id="@+id/textView1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:text="Splash"
-		        android:textSize="25sp" />
+	        android:orientation="vertical"
+	        android:background="#d20000"
+	        android:visibility="visible">
 	    </LinearLayout>
 	
 	    <!-- To make LinearLayout clickable to trigger onContentTouchedWhenOpening()  -->
@@ -32,7 +27,15 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:orientation="vertical"
-	        android:visibility="gone">
+	        android:visibility="visible"
+	        android:layout_marginTop="100dp">
+	        <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:text="Splash"
+		        android:textSize="25sp" />
 	    </LinearLayout>
 	</FrameLayout>
 	
