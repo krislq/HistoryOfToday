@@ -11,12 +11,15 @@ import org.codehaus.jackson.type.TypeReference;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.krislq.history.R;
 import com.krislq.history.json.ContentJson;
@@ -26,6 +29,7 @@ import com.krislq.history.manager.ITransaction;
 import com.krislq.history.util.DateUtil;
 import com.krislq.history.util.HistoryUtil;
 import com.krislq.history.util.L;
+import com.krislq.history.view.ContentListEventView;
 import com.krislq.history.view.ContentSelftEventView;
 import com.krislq.history.view.ContentTitleView;
 
@@ -37,21 +41,28 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	
 	private static final int 		DISPLAY_SELF_EVENT = 0x0000;
 	private static final int 		DISPLAY_LIST_EVENT = 0x0001;
+	
+
+	private static final int 		DISPLAY_LIST_EVENT_BIG_EVENT = 0x0000;
+	private static final int 		DISPLAY_LIST_EVENT_BIRTH = 0x0001;
+	private static final int 		DISPLAY_LIST_EVENT_DIE = 0x0002;
 	private Button			mBtnShare;
 	public 	ObjectMapper 	mObjectMapper = null;
 	private HistoryJson 	mResponseObject = null;
 	
 	private ViewGroup		mGroundOne;
 	private ViewGroup		mGroundTwo;
+	private Handler			mHandler;
 	
 	private int 			mSelectSelfEventIndex = 0;
-	private int 			mSelectListEventIndex = 0;
+	private int 			mSelectListEventIndex = DISPLAY_LIST_EVENT_BIG_EVENT;
 	private int 			mDisplayIndex = DISPLAY_SELF_EVENT;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mObjectMapper = new ObjectMapper();
+		mHandler = new UIHandler();
 		setContentView(R.layout.history_of_today);
 		mBtnShare = (Button)findViewById(R.id.btn_share);
 		mBtnShare.setOnClickListener(this);
@@ -62,12 +73,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		getHistoryData(DateUtil.toTime(System.currentTimeMillis(), DateUtil.DATE_FORMATE_HISTORY));
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
 	
 	private void getHistoryData(String date)
 	{
@@ -79,12 +84,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		HttpManager httpManager = new HttpManager(url,requestData, HttpManager.GET, getHistoryTransaction);
 		httpManager.start();
 	}
-
-//	@Override
-//	public void onClick(View v) {
-//		
-//		}
-//	}
 	
 	public void initLayoutPosition() {
 		LayoutParams twoParams = (LayoutParams) mGroundTwo.getLayoutParams();
@@ -95,7 +94,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		mGroundTwo.requestLayout();
 	}
 	
-	private Handler mHandler = new Handler(){
+	class UIHandler extends Handler{
 
 		@Override
 		public void handleMessage(Message msg) {
@@ -124,17 +123,16 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 				mGroundOne.addView(selfEventTitleView.generateTitle());
 				L.e("OK");
 				ContentJson content = selfEvenContents.get(selectSelfIndex);
-				ContentSelftEventView eventView = new ContentSelftEventView(HistoryActivity.this);
-				eventView.setContent(content);
-				mGroundOne.addView(eventView.generateContentView());
+				ContentSelftEventView contentSelftEventView = new ContentSelftEventView(HistoryActivity.this);
+				contentSelftEventView.setContent(content);
+				mGroundOne.addView(contentSelftEventView.generateContentView());
 				break;
 			case HANDLER_CHANGE_LIST_EVENT:
 				int selectListIndex = msg.arg1;
-				List<ContentJson> selEvenContents = mResponseObject.getListEvent().getSelfEvent();
 				List<String> listEventTitles = fitListEventTitles();
 				ContentTitleView listEventTitleView = new ContentTitleView(HistoryActivity.this);
 				listEventTitleView.setTitles(listEventTitles);
-				listEventTitleView.setSelectIndex(mSelectListEventIndex);
+				listEventTitleView.setSelectIndex(selectListIndex);
 				listEventTitleView.setOnClickListener(new TabTitleClickListener() {
 					@Override
 					public void onTitleClick(ContentTitleView contentTitleView, View view,
@@ -146,6 +144,10 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 				mGroundTwo.removeAllViews();
 				mGroundTwo.addView(listEventTitleView.generateTitle());
 				L.e("OK");
+				
+				ContentListEventView   contentListEventView = new ContentListEventView(HistoryActivity.this);
+				contentListEventView.setContents(getListEvents(selectListIndex));
+				mGroundTwo.addView(contentListEventView.generateContentView());
 				break;
 			case HANDLER_SHOW_ERROR:
 				
@@ -157,6 +159,26 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		}
 		
 	};
+	
+	private List<ContentJson> getListEvents(int index) {
+		List<ContentJson> listEvenContents = new ArrayList<ContentJson>(10);
+		LinearLayout layoutListEvent = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.list_event, null);
+		for(ContentJson json:listEvenContents) {
+			TextView title = new TextView(mContext);
+		}
+		switch (index) {
+		case DISPLAY_LIST_EVENT_BIRTH:
+			listEvenContents = mResponseObject.getListEvent().getBirth().getContent();
+			break;
+		case DISPLAY_LIST_EVENT_DIE:
+			listEvenContents = mResponseObject.getListEvent().getDied().getContent();
+			break;
+		default:
+			listEvenContents = mResponseObject.getListEvent().getBigEvent().getContent();
+			break;
+		}
+		return listEvenContents;
+	}
 
 	private List<String> fitTitles(List<ContentJson> content) {
 		List<String> titles = new ArrayList<String>(content.size());
@@ -202,5 +224,12 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
 	}
 }
