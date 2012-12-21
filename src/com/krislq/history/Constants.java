@@ -24,5 +24,4 @@ public class Constants {
 	public static  		String		EXTERNAL_DIR 		= HistoryUtil.getExternalStoragePath()+File.separator+APP_NAME;
 	public static  		String		CACHE_DIR 			= EXTERNAL_DIR+File.separator+"cache";
 	public static  		String		LOG_DIR 			= EXTERNAL_DIR+File.separator+"log";
-	public static  		String		IMAGE_DIR 			= EXTERNAL_DIR+File.separator+"image";
 }

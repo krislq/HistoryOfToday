@@ -256,4 +256,74 @@ public class HistoryUtil {
 		InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(view, 0);
 	}
+	public static String toCharString(String str) {
+		if (TextUtils.isEmpty(str)) {
+			str = "null";
+		}
+		String strBuf = "";
+		for (int i = 0; i < str.length(); i++) {
+			int a = str.charAt(i);
+			strBuf += Integer.toHexString(a).toUpperCase();
+		}
+//		strBuf=String.valueOf(str.hashCode());
+		return strBuf;
+	}
+
+	public static void initExternalDir(boolean cleanFile)
+	{
+		if(HistoryUtil.isExternalStorageEnable())
+		{
+			File external = new File(Constants.EXTERNAL_DIR);
+			if(!external.exists())
+			{
+				external.mkdirs();
+			}
+			//check the cache whether exist
+			File cache = new File(Constants.CACHE_DIR);
+			if(!cache.exists())
+			{
+				cache.mkdirs();
+			}
+			else
+			{
+				if(cleanFile)
+				{
+					//if exist,so clear the old file
+					cleanFile(cache, DateUtil.WEEK_MILLIS);
+				}
+			}
+			//check the log dir
+			File logs = new File(Constants.LOG_DIR);
+			if(!logs.exists())
+			{
+				logs.mkdirs();
+			}
+			else
+			{
+				if(cleanFile)
+				{
+					cleanFile(logs, DateUtil.WEEK_MILLIS);
+				}
+			}
+		}
+	}
+	private static int cleanFile(File dir, long maxInterval)
+	{
+		File[] files = dir.listFiles();
+		if(files == null) return 0;
+		int beforeNum = 0;
+		long current = System.currentTimeMillis();
+		for(File file:files)
+		{
+			long lastModifiedTime = file.lastModified();
+			if((current-lastModifiedTime) > maxInterval)
+			{
+				//if the file is exist more than a week , so need to delete.
+				file.delete();
+				beforeNum ++;
+			}
+		}
+		return beforeNum;
+	}
+
 }

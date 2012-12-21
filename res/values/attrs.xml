@@ -46,5 +46,5 @@
         <attr name="footerColor" format="color" />
         <attr name="footerTriangleHeight" format="dimension" />
         <attr name="customTypeface" format="string" />
-    </declare-styleable>
+    </declare-styleable>    
 </resources>

@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.krislq.history"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <include layout="@layout/title" 
@@ -8,35 +8,65 @@
         android:layout_height="wrap_content" 
         android:layout_alignParentTop="true"/>
 	
-	<FrameLayout android:id="@+id/layout_content" 
+	<LinearLayout android:id="@+id/layout_content" 
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:layout_below="@+id/layout_title">
-	    <LinearLayout
+	    android:layout_below="@+id/layout_title"
+	    android:orientation="vertical">
+	    <RelativeLayout
 	        android:id="@+id/animation_layout_one"
 	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
+	        android:layout_height="166dp"
 	        android:orientation="vertical"
-	        android:background="#d20000"
 	        android:visibility="visible">
-	    </LinearLayout>
+		    <org.taptwo.android.widget.ViewFlow
+		        android:duplicateParentState="true" 
+		        android:id="@+id/viewflow_self_event"
+		        android:layout_width="fill_parent" 
+		        android:layout_height="fill_parent">
+		    </org.taptwo.android.widget.ViewFlow>
+            <org.taptwo.android.widget.CircleFlowIndicator
+		        android:id="@+id/circle_flow_indicato" 
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:layout_alignParentBottom="true"
+		        app:inactiveType="fill"
+				app:fadeOut="1000"
+				app:activeColor="#ff0"
+				app:inactiveColor="#f00"/>
+	    </RelativeLayout>
 	
-	    <!-- To make LinearLayout clickable to trigger onContentTouchedWhenOpening()  -->
-	    <LinearLayout
+	    <RelativeLayout
 	        android:id="@+id/animation_layout_two"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:orientation="vertical"
-	        android:visibility="visible"
-	        android:layout_marginTop="100dp">
-	        <TextView
-		        android:id="@+id/textView1"
-		        android:layout_width="wrap_content"
+	        android:visibility="visible">
+			<org.taptwo.android.widget.TitleFlowIndicator 
+			    android:id="@+id/title_flow_indicator" 
 		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:text="Splash"
-		        android:textSize="25sp" />
-	    </LinearLayout>
-	</FrameLayout>
+		        android:layout_width="fill_parent"
+		        android:background="#3a3a3a"
+		        android:layout_centerHorizontal="true"
+		        app:footerLineHeight="2dp"
+		        app:customTypeface="fonts/Antic.ttf"
+		        app:footerTriangleHeight="10dp" 
+		        app:textColor="#869a2a" 
+		        app:selectedColor="#95a939" 
+		        app:footerColor="#FFFFC445" 
+		        app:titlePadding="10dp" 
+		        app:textSize="12dp"
+		        app:selectedBold="true"
+		        app:selectedSize="13dp"
+		        app:clipPadding="5dp"/>
+		    <org.taptwo.android.widget.ViewFlow
+		        android:duplicateParentState="true" 
+		        android:id="@+id/viewflow_list_event"
+		        android:layout_width="fill_parent" 
+		        android:layout_height="fill_parent"
+		        android:layout_below="@+id/title_flow_indicator"/>
+	    </RelativeLayout>
+	</LinearLayout>
 	
 </RelativeLayout>
