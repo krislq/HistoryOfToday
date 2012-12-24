@@ -19,6 +19,7 @@ import com.krislq.history.R;
 import com.krislq.history.json.ContentJson;
 import com.krislq.history.json.ListEventJson;
 import com.krislq.history.manager.DownloadManager;
+import com.krislq.history.util.L;
 
 
 public class TitleIndicatorAdapter extends BaseAdapter implements TitleProvider {
@@ -69,7 +70,7 @@ public class TitleIndicatorAdapter extends BaseAdapter implements TitleProvider 
 			for(ContentJson content:contents) {
 				View itemView = mInflater.inflate(R.layout.list_event_item, null);
 				TextView title = (TextView)itemView.findViewById(R.id.tv_list_event_content_item);
-				title.setText(Html.fromHtml(content.getTitle()));
+				title.setText(Html.fromHtml(content.getTitle()).toString());
 				layout.addView(itemView);
 			}
 			viewMap.put(position, convertView);

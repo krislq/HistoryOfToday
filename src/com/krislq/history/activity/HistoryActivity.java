@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -51,6 +52,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		mHandler = new UIHandler();
 		mDownloadManager = new DownloadManager(mContext, mHandler);
 		setContentView(R.layout.history_of_today);
+		setTitle(R.string.app_name);
 		mBtnShare = (Button)findViewById(R.id.btn_share);
 		mBtnShare.setOnClickListener(this);
 		
@@ -112,6 +114,22 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_about:
+			System.out.println("About");
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
 	class UIHandler extends Handler{
 
 		@Override

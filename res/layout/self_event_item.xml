@@ -4,19 +4,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
-    android:padding="10dp"
     android:orientation="vertical">
     
     <ImageView
         android:id="@+id/im_self_ecent_image"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="295dp"
+        android:layout_height="166dp" 
+        android:layout_centerHorizontal="true"/>
     <TextView
         android:id="@+id/tv_self_event_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Content"
+        android:textColor="#000"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:background="#d2d2d2" />
+        android:background="#88d2d2d2" />
 </RelativeLayout>
