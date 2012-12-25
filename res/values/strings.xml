@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HistoryOfToday</string>
+    <string name="app_name">History Of Today</string>
     <string name="menu_about">About</string>
     <string name="more">More</string>
     <string name="title_big_event">Big Event</string>
     <string name="title_birth">出生</string>
     <string name="title_die">近世</string>
+    <string name="about">About</string>
+    <string name="version">Version:</string>
+    <string name="email">E-Mail:</string>
+    <string name="email_content">kris@krislq.com</string>
+    <string name="design">Design by:</string>
+    <string name="design_content">Kris Lee</string>
+    <string name="kris_on_mobile_develpment">www.krislq.com</string>
+    <string name="msg_loading">loading for you ... </string>
 
 </resources>

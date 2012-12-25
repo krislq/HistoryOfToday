@@ -9,6 +9,7 @@ import org.taptwo.android.widget.CircleFlowIndicator;
 import org.taptwo.android.widget.TitleFlowIndicator;
 import org.taptwo.android.widget.ViewFlow;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.krislq.history.R;
 import com.krislq.history.json.HistoryJson;
@@ -33,9 +35,13 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private static final int 		DISPLAY_SELF_EVENT = 0x0000;
 	private static final int 		DISPLAY_LIST_EVENT = 0x0001;
 	
-	private Button			mBtnShare;
+	private Button			mBtnLeft;
+	private Button			mBtnRight;
 	public 	ObjectMapper 	mObjectMapper = null;
 	private HistoryJson 	mResponseObject = null;
+	
+	private LinearLayout	mContentLayout = null;
+	private LinearLayout	mEmptyLayout = null;
 	
 	private ViewFlow		mViewFlowSelfEvent;
 	private ViewFlow		mViewFlowListEvent;
@@ -53,8 +59,14 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		mDownloadManager = new DownloadManager(mContext, mHandler);
 		setContentView(R.layout.history_of_today);
 		setTitle(R.string.app_name);
-		mBtnShare = (Button)findViewById(R.id.btn_share);
-		mBtnShare.setOnClickListener(this);
+		mBtnLeft = (Button)findViewById(R.id.btn_left);
+		mBtnLeft.setOnClickListener(this);
+		mBtnRight = (Button)findViewById(R.id.btn_right);
+		mBtnRight.setOnClickListener(this);
+		
+		mContentLayout = (LinearLayout)findViewById(R.id.layout_content);
+		mEmptyLayout = (LinearLayout)findViewById(R.id.layout_empty);
+		setAccessStatus(true);
 		
 		mViewFlowSelfEvent = (ViewFlow)findViewById(R.id.viewflow_self_event);
 		mViewFlowListEvent = (ViewFlow)findViewById(R.id.viewflow_list_event);
@@ -64,6 +76,15 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		getHistoryData(DateUtil.toTime(System.currentTimeMillis(), DateUtil.DATE_FORMATE_HISTORY));
 	}
 
+	private void setAccessStatus(boolean isLoading) {
+		if(isLoading) {
+			mContentLayout.setVisibility(View.GONE);
+			mEmptyLayout.setVisibility(View.VISIBLE);
+		} else {
+			mContentLayout.setVisibility(View.VISIBLE);
+			mEmptyLayout.setVisibility(View.GONE);
+		}
+	}
 	
 	private void getHistoryData(String date)
 	{
@@ -100,7 +121,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.btn_share:
+		case R.id.btn_left:
+			break;
+		case R.id.btn_right:
 			break;
 
 		default:
@@ -120,7 +143,8 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_about:
-			System.out.println("About");
+			Intent aboutIntent = new Intent(this,AboutActivity.class);
+			startActivity(aboutIntent);
 			break;
 
 		default:
@@ -144,6 +168,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 				CircleIndicatorAdapter circleIndicatorAdapter = new CircleIndicatorAdapter(mContext, mResponseObject.getListEvent().getSelfEvent(), mDownloadManager);
 				mViewFlowSelfEvent.setAdapter(circleIndicatorAdapter);
 				mViewFlowSelfEvent.setFlowIndicator(mCircleFlowIndicator);
+				setAccessStatus(false);
 				break;
 			case HANDLER_SHOW_ERROR:
 				

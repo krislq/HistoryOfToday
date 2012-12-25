@@ -1,10 +1,11 @@
 package com.krislq.history.activity;
 
-import com.krislq.history.R;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.krislq.history.R;
 
 /**
  * the base activity, could do something all the activity will to do.

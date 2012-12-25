@@ -3,7 +3,9 @@ package com.krislq.history.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.krislq.history.Constants;
 import com.krislq.history.R;
+import com.krislq.history.util.HistoryUtil;
 import com.krislq.history.util.ThreadPoolUtil;
 
 public class SplashActivity extends BaseActivity {
@@ -16,6 +18,7 @@ public class SplashActivity extends BaseActivity {
 			
 			@Override
 			public void run() {
+				Constants.PACKAGE_NAME = HistoryUtil.getPackageName(mContext);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
