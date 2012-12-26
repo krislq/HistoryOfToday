@@ -9,10 +9,11 @@ import android.util.Log;
 import com.krislq.history.Constants;
 
 /**
- * log util
- * @author <a href="mailto:kris@matchmovegames.com">Kris.lee</a>
- * @since 1.0.0 ä¸??11:09:00
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
  * @version 1.0.0
+ *
  */
 public class L {
 	private static final String TAG				= Constants.APP_NAME;

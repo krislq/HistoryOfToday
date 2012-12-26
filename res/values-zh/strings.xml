@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">历史上的今天</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_feedback">反馈</string>
+    <string name="title_big_event">大事件</string>
+    <string name="title_birth">出生</string>
+    <string name="title_die">逝世</string>
+    <string name="about">关于</string>
+    <string name="version">版本:</string>
+    <string name="email">邮件:</string>
+    <string name="email_content">kris@krislq.com</string>
+    <string name="design">设计:</string>
+    <string name="design_content">Kris Lee</string>
+    <string name="web">网站:</string>
+    <string name="web_content">www.krislq.com</string>
+    <string name="kris_on_mobile_develpment">www.krislq.com</string>
+    <string name="msg_loading">拼了命的为你加载 ... </string>
+    <string name="date">%1$s月%2$s日</string>
+    <string name="msg_error_exception">哎呀，服务器好像不通啊。</string>
+    <string name="msg_error_json">哦哦，返回数据是错滴。</string>
+    <string name="retry">重试</string>
+    <string name="dialog_title">提示</string>
+    <string name="dialog_content">你可以点击标题栏中间来返回到今天的日期。</string>
+    <string name="dialog_ok">好吧，知道了</string>
+    <string name="splash_content">专注联动互联，\n提供移动开发、培训与解决方案</string>
+
+</resources>

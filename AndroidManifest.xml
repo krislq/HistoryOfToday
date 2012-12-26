@@ -10,6 +10,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.READ_LOGS"></uses-permission>
+	
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -27,6 +34,20 @@
         </activity>
         <activity android:name=".activity.HistoryActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.AboutActivity" android:screenOrientation="portrait"></activity>
+        
+        <activity android:name="com.umeng.fb.ui.SendFeedback" android:windowSoftInputMode="adjustResize" />
+		<activity android:name="com.umeng.fb.ui.FeedbackConversations" />
+		<activity android:name="com.umeng.fb.ui.FeedbackConversation"
+		    android:configChanges="keyboard" />
+        
+		<service
+		    android:name="com.umeng.common.net.DownloadingService"
+		    android:exported="true"
+		    android:process=":DownloadingService" >
+		</service>
+
+        <meta-data android:value="50db058152701506560001ab" android:name="UMENG_APPKEY"></meta-data>
+		<meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

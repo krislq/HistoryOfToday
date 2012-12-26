@@ -2,26 +2,34 @@ package com.krislq.history.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.krislq.history.Constants;
 import com.krislq.history.R;
+import com.krislq.history.manager.PreferenceManager;
+import com.umeng.analytics.MobclickAgent;
 
 /**
- * the base activity, could do something all the activity will to do.
  * 
- * @author <a href="mailto:kris@matchmovegames.com">Kris.lee</a>
- * @since 1.0.0 ä¸??04:11:39
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
  * @version 1.0.0
+ *
  */
 public abstract class BaseActivity extends Activity {
 	protected BaseActivity 		mContext = null;
 	private TextView			mtvTitle = null;
+	
+	protected PreferenceManager  mPrefereceManager = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
+		mPrefereceManager = new PreferenceManager(mContext);
+		MobclickAgent.setDebugMode(Constants.DEBUG);
+		MobclickAgent.onError(this);
 	}
 
 	
@@ -41,21 +49,28 @@ public abstract class BaseActivity extends Activity {
 			mtvTitle.setText(title);
 		}
 	}
+	public void setTitleOnClickListener(OnClickListener l) {
+		if(mtvTitle != null) {
+			mtvTitle.setOnClickListener(l);
+		}
+	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		MobclickAgent.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+
 	}
 
 	@Override

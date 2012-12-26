@@ -15,7 +15,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.krislq.history.Constants;
-
+/**
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
+ * @version 1.0.0
+ *
+ */
 public class HistoryUtil {
 	/**
 	 * get the external storage file

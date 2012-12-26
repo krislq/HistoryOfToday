@@ -12,7 +12,7 @@
         -->
         <item name="android:windowNoTitle">true</item>
         <!--  <item name="android:windowFullscreen">true</item> -->
-        <item name="android:background">#fff</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <!-- Application theme. -->

@@ -5,4 +5,8 @@
         android:orderInCategory="100"
         android:title="@string/menu_about"/>
 
+    <item
+        android:id="@+id/menu_feedback"
+        android:orderInCategory="100"
+        android:title="@string/menu_feedback"/>
 </menu>

@@ -21,7 +21,13 @@ import com.krislq.history.json.ListEventJson;
 import com.krislq.history.manager.DownloadManager;
 import com.krislq.history.util.L;
 
-
+/**
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
+ * @version 1.0.0
+ *
+ */
 public class TitleIndicatorAdapter extends BaseAdapter implements TitleProvider {
 	public static final int 	LIST_EVENT_BIG_EVENT = 0x0000;
 	public static final int 	LIST_EVENT_BIRTH = 0x0001;

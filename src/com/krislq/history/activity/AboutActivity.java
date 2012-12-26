@@ -8,6 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
+ * @version 1.0.0
+ *
+ */
 public class AboutActivity extends BaseActivity {
 	private TextView	tvVersion;
 	@Override

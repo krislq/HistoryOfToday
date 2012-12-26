@@ -1,15 +1,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Splash"
-        android:textSize="25sp" />
+    android:gravity="center">
+	<LinearLayout android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:gravity="center">
+	    <ImageView
+	        android:id="@+id/im_ad"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:src="@drawable/ad_banner"/>
+	    <TextView
+	        android:id="@+id/tv_content"
+	        android:gravity="center"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:text="@string/splash_content"
+	        android:layout_marginTop="10dp"
+	        android:typeface="serif"
+	        android:textColor="#a2a2a2"
+	        android:padding="15dp"
+	        android:textStyle="bold"
+	        android:textSize="18sp" />
+    </LinearLayout>
 	
 </RelativeLayout>

@@ -10,6 +10,9 @@ import org.taptwo.android.widget.CircleFlowIndicator;
 import org.taptwo.android.widget.TitleFlowIndicator;
 import org.taptwo.android.widget.ViewFlow;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,13 +33,25 @@ import com.krislq.history.manager.HttpManager;
 import com.krislq.history.manager.ITransaction;
 import com.krislq.history.util.DateUtil;
 import com.krislq.history.util.L;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.UMFeedbackService;
 
+/**
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
+ * @version 1.0.0
+ *
+ */
 public class HistoryActivity extends BaseActivity implements OnClickListener{
 	public static final int 		HANDLER_SHOW_DATA = 0x0001;
 	public static final int 		HANDLER_SHOW_ERROR = 0x0002;
+	public static final int 		HANDLER_REFRESH_VIEW = 0x0003;
+	public static final int 		HANDLER_GO_TO_PEW = 0x0004;
+	public static final int 		HANDLER_GO_TO_NEXT = 0x0005;
 	
-	private static final int 		DISPLAY_SELF_EVENT = 0x0000;
-	private static final int 		DISPLAY_LIST_EVENT = 0x0001;
+	private static final int 		DIALOG_PRE = 0x1000;
+	private static final int 		DIALOG_NEXT = 0x2000;
 	
 	private Button			mBtnLeft;
 	private Button			mBtnRight;
@@ -54,6 +69,8 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private ViewFlow		mViewFlowListEvent;
 	private CircleFlowIndicator mCircleFlowIndicator;
 	private TitleFlowIndicator 	mTitleFlowIndicator;
+	private TitleIndicatorAdapter mTitleIndicatorAdapter;
+	private CircleIndicatorAdapter mCircleIndicatorAdapter;
 	private UIHandler		mHandler;
 	private DownloadManager mDownloadManager;
 	
@@ -63,11 +80,14 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MobclickAgent.onEvent(mContext, "Start", "HistoryActivity");
 		mObjectMapper = new ObjectMapper();
 		mHandler = new UIHandler();
 		mCalendar = Calendar.getInstance();
 		mDownloadManager = new DownloadManager(mContext, mHandler);
 		setContentView(R.layout.history_of_today);
+		
+		setTitleOnClickListener(this);
 		mBtnLeft = (Button)findViewById(R.id.btn_left);
 		mBtnLeft.setOnClickListener(this);
 		mBtnRight = (Button)findViewById(R.id.btn_right);
@@ -85,7 +105,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		mCircleFlowIndicator = (CircleFlowIndicator)findViewById(R.id.circle_flow_indicato);
 		mTitleFlowIndicator = (TitleFlowIndicator)findViewById(R.id.title_flow_indicator);
 		//get today
-		
 		getHistoryData(mCalendar);
 	}
 
@@ -139,6 +158,32 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		httpManager.start();
 	}
 	
+	
+	@Override
+	protected Dialog onCreateDialog(final int id) {
+		return new AlertDialog.Builder(mContext)
+		.setCancelable(false)
+        .setTitle(R.string.dialog_title)
+        .setMessage(R.string.dialog_content)
+        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				mPrefereceManager.setFirstChangeDate(false);
+				switch (id) {
+				case DIALOG_NEXT:
+					mHandler.sendEmptyMessage(HANDLER_GO_TO_NEXT);
+					break;
+
+				case DIALOG_PRE:
+					mHandler.sendEmptyMessage(HANDLER_GO_TO_PEW);
+					break;
+				}
+			}
+		})
+        .create();
+	}
+
+
 	public ITransaction getHistoryTransaction = new ITransaction() {
 		@Override
 		public void transactionOver(String result) {
@@ -163,15 +208,26 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.btn_left:
-			getHistoryData(addDay(mCalendar, -1));
+			if(mPrefereceManager.isFirstChangeDate()) {
+				showDialog(DIALOG_PRE);
+			} else {
+				mHandler.sendEmptyMessage(HANDLER_GO_TO_PEW);
+			}
 			break;
 		case R.id.btn_right:
-			getHistoryData(addDay(mCalendar, 1));
+			if(mPrefereceManager.isFirstChangeDate()) {
+				showDialog(DIALOG_NEXT);
+			} else {
+				mHandler.sendEmptyMessage(HANDLER_GO_TO_NEXT);
+			}
 			break;
 		case R.id.btn_retry:
 			getHistoryData(mCalendar);
 			break;
-
+		case R.id.tv_title:
+			MobclickAgent.onEvent(mContext, "ChangeDate", "GoToday");
+			getHistoryData(Calendar.getInstance());
+			break;
 		default:
 			break;
 		}
@@ -192,7 +248,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 			Intent aboutIntent = new Intent(this,AboutActivity.class);
 			startActivity(aboutIntent);
 			break;
-
+		case R.id.menu_feedback:
+			UMFeedbackService.openUmengFeedbackSDK(this);
+			break;
 		default:
 			break;
 		}
@@ -206,13 +264,13 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case HANDLER_SHOW_DATA:
-				TitleIndicatorAdapter titleIndicatorAdapter = new TitleIndicatorAdapter(HistoryActivity.this,mResponseObject.getListEvent());
-				mViewFlowListEvent.setAdapter(titleIndicatorAdapter, 0);
-				mTitleFlowIndicator.setTitleProvider(titleIndicatorAdapter);
+				mTitleIndicatorAdapter = new TitleIndicatorAdapter(HistoryActivity.this,mResponseObject.getListEvent());
+				mViewFlowListEvent.setAdapter(mTitleIndicatorAdapter, 0);
+				mTitleFlowIndicator.setTitleProvider(mTitleIndicatorAdapter);
 				mViewFlowListEvent.setFlowIndicator(mTitleFlowIndicator);
 				
-				CircleIndicatorAdapter circleIndicatorAdapter = new CircleIndicatorAdapter(mContext, mResponseObject.getListEvent().getSelfEvent(), mDownloadManager);
-				mViewFlowSelfEvent.setAdapter(circleIndicatorAdapter);
+				mCircleIndicatorAdapter = new CircleIndicatorAdapter(mContext, mResponseObject.getListEvent().getSelfEvent(), mDownloadManager);
+				mViewFlowSelfEvent.setAdapter(mCircleIndicatorAdapter);
 				mViewFlowSelfEvent.setFlowIndicator(mCircleFlowIndicator);
 				setAccessStatus(false);
 				break;
@@ -221,7 +279,18 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 				mProgressBar.setVisibility(View.GONE);
 				mbtnRetry.setVisibility(View.VISIBLE);
 				break;
-
+			case HANDLER_REFRESH_VIEW:
+				mTitleIndicatorAdapter.notifyDataSetChanged();
+				mCircleIndicatorAdapter.notifyDataSetChanged();
+				break;
+			case HANDLER_GO_TO_NEXT:
+				MobclickAgent.onEvent(mContext, "ChangeDate", "Next");
+				getHistoryData(addDay(mCalendar, 1));
+				break;
+			case HANDLER_GO_TO_PEW:
+				MobclickAgent.onEvent(mContext, "ChangeDate", "Pre");
+				getHistoryData(addDay(mCalendar, -1));
+				break;
 			default:
 				break;
 			}

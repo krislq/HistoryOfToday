@@ -6,10 +6,11 @@ import java.util.Date;
 import android.content.Context;
 import android.text.TextUtils;
 /**
- * date util,could use the class to get time with formated
- * @author <a href="mailto:kris@matchmovegames.com">Kris.lee</a>
- * @since 1.0.0 ä¸????6:32:00
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
  * @version 1.0.0
+ *
  */
 public class DateUtil {
 	public static final long 		HOURS_MILLIS 					= 60 * 60 * 1000;

@@ -3,7 +3,7 @@
 
     <string name="app_name">History Of Today</string>
     <string name="menu_about">About</string>
-    <string name="more">More</string>
+    <string name="menu_feedback">Feedback</string>
     <string name="title_big_event">BIG EVENT</string>
     <string name="title_birth">BIRTH</string>
     <string name="title_die">DIE</string>
@@ -21,5 +21,9 @@
     <string name="msg_error_exception">Sorry, Can not access the server.</string>
     <string name="msg_error_json">Sorry, Can not parse the result.</string>
     <string name="retry">Retry</string>
+    <string name="dialog_title">Tips</string>
+    <string name="dialog_content">You can click the center position of the title to go back today.</string>
+    <string name="dialog_ok">Ok , Got it</string>
+    <string name="splash_content">Focus on mobile, \nprovide mobile development,\ntraining and solutions</string>
 
 </resources>

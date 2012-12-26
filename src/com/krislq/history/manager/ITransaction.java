@@ -2,10 +2,11 @@ package com.krislq.history.manager;
 
 
 /**
- * a callback class. be used to manager a http.
- * @author <a href="mailto:kris@matchmovegames.com">Kris.lee</a>
- * @since 1.0.0 12:39:53 pm
+ * 
+ * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
  * @version 1.0.0
+ *
  */
 public interface ITransaction{
 	/**

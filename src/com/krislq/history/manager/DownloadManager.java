@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import com.krislq.history.Constants;
+import com.krislq.history.activity.HistoryActivity;
 import com.krislq.history.util.HistoryUtil;
 import com.krislq.history.util.ImageUtil;
 import com.krislq.history.util.L;
@@ -404,8 +405,9 @@ public class DownloadManager {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
+					L.e("handler.post(new Runnable() {");
 					imageView.setImageBitmap(bitmap);
-					imageView.requestLayout();
+					handler.sendEmptyMessage(HistoryActivity.HANDLER_REFRESH_VIEW);
 				}
 			});
 		}

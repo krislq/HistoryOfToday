@@ -3,10 +3,11 @@ package com.krislq.history.manager;
 import org.apache.http.Header;
 
 /**
- *ã€?ttp response exception.<br> 
- *if the responce status code is no begin with 2, will throw this exception
+ * 
  * @author <a href="mailto:kris1987@qq.com">Kris.lee</a>
+ * @date 2012-12-26
  * @version 1.0.0
+ *
  */
 public class HttpResponseException extends Exception {
 	private static final long serialVersionUID = 2425069222735716912L;
