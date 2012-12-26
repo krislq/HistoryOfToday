@@ -1,5 +1,6 @@
 package com.krislq.history.activity;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.krislq.history.R;
 import com.krislq.history.json.HistoryJson;
@@ -43,6 +46,10 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private LinearLayout	mContentLayout = null;
 	private LinearLayout	mEmptyLayout = null;
 	
+	private ProgressBar		mProgressBar = null;
+	private TextView		mtvMessage = null;
+	private Button			mbtnRetry = null;
+	
 	private ViewFlow		mViewFlowSelfEvent;
 	private ViewFlow		mViewFlowListEvent;
 	private CircleFlowIndicator mCircleFlowIndicator;
@@ -50,15 +57,17 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	private UIHandler		mHandler;
 	private DownloadManager mDownloadManager;
 	
+	private Calendar		mCalendar;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mObjectMapper = new ObjectMapper();
 		mHandler = new UIHandler();
+		mCalendar = Calendar.getInstance();
 		mDownloadManager = new DownloadManager(mContext, mHandler);
 		setContentView(R.layout.history_of_today);
-		setTitle(R.string.app_name);
 		mBtnLeft = (Button)findViewById(R.id.btn_left);
 		mBtnLeft.setOnClickListener(this);
 		mBtnRight = (Button)findViewById(R.id.btn_right);
@@ -66,28 +75,61 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		
 		mContentLayout = (LinearLayout)findViewById(R.id.layout_content);
 		mEmptyLayout = (LinearLayout)findViewById(R.id.layout_empty);
-		setAccessStatus(true);
+		mProgressBar = (ProgressBar)findViewById(R.id.progress_bar);
+		mtvMessage = (TextView)findViewById(R.id.tv_message);
+		mbtnRetry = (Button)findViewById(R.id.btn_retry);
+		mbtnRetry.setOnClickListener(this);
 		
 		mViewFlowSelfEvent = (ViewFlow)findViewById(R.id.viewflow_self_event);
 		mViewFlowListEvent = (ViewFlow)findViewById(R.id.viewflow_list_event);
 		mCircleFlowIndicator = (CircleFlowIndicator)findViewById(R.id.circle_flow_indicato);
 		mTitleFlowIndicator = (TitleFlowIndicator)findViewById(R.id.title_flow_indicator);
 		//get today
-		getHistoryData(DateUtil.toTime(System.currentTimeMillis(), DateUtil.DATE_FORMATE_HISTORY));
+		
+		getHistoryData(mCalendar);
 	}
 
 	private void setAccessStatus(boolean isLoading) {
 		if(isLoading) {
 			mContentLayout.setVisibility(View.GONE);
 			mEmptyLayout.setVisibility(View.VISIBLE);
+			mProgressBar.setVisibility(View.VISIBLE);
+			mtvMessage.setText(R.string.msg_loading);
+			mbtnRetry.setVisibility(View.GONE);
 		} else {
 			mContentLayout.setVisibility(View.VISIBLE);
 			mEmptyLayout.setVisibility(View.GONE);
 		}
 	}
 	
-	private void getHistoryData(String date)
+	private void refreshTitle(Calendar calendar) {
+		setTitle(getString(R.string.date, calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH)));
+		
+		Calendar preCalendar = addDay(calendar, -1);
+		mBtnLeft.setText(DateUtil.toTime(preCalendar.getTimeInMillis(), DateUtil.DATE_FORMATE_HISTORY));
+		mBtnLeft.setText(getString(R.string.date, preCalendar.get(Calendar.MONTH)+1,preCalendar.get(Calendar.DAY_OF_MONTH)));
+		
+		Calendar lastCalendar = addDay(calendar, 1);
+		mBtnRight.setText(DateUtil.toTime(lastCalendar.getTimeInMillis(), DateUtil.DATE_FORMATE_HISTORY));
+		mBtnRight.setText(getString(R.string.date, lastCalendar.get(Calendar.MONTH)+1,lastCalendar.get(Calendar.DAY_OF_MONTH)));
+	}
+	
+	private Calendar addDay(Calendar calendar, int addDay) {
+		int dateOdYear = calendar.get(Calendar.DAY_OF_YEAR);
+		Calendar newCalendar = Calendar.getInstance();
+		newCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		newCalendar.set(Calendar.DAY_OF_YEAR, dateOdYear + addDay);
+		return newCalendar;
+	}
+	
+	private void getHistoryData(Calendar calender)
 	{
+		mCalendar = calender;
+		//refresh titile
+		refreshTitle(mCalendar);
+		setAccessStatus(true);
+		
+		String date = (mCalendar.get(Calendar.MONTH)+1 )+"-"+mCalendar.get(Calendar.DAY_OF_MONTH);
 		//http://baike.baidu.com/app/historyontoday?asyn=1&date=12-19
 		String url = "http://baike.baidu.com/app/historyontoday";
 		Map<String,String> requestData = new HashMap<String, String>(2);
@@ -100,20 +142,19 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	public ITransaction getHistoryTransaction = new ITransaction() {
 		@Override
 		public void transactionOver(String result) {
-			
 			try {
 				mResponseObject = mObjectMapper.readValue(result, new TypeReference<HistoryJson>() { });
 				mHandler.sendEmptyMessage(HANDLER_SHOW_DATA);
 			} catch (Exception e) {
 				L.e("getGiftsTransaction exception", e);
 				mResponseObject = null;
-				mHandler.sendEmptyMessage(HANDLER_SHOW_ERROR);
+				mHandler.obtainMessage(HANDLER_SHOW_ERROR,mContext.getString(R.string.msg_error_json)).sendToTarget();
 			}
 		}
 		
 		@Override
 		public void transactionException(int erroCode,String result, Exception e) {
-			mHandler.obtainMessage(HANDLER_SHOW_ERROR).sendToTarget();
+			mHandler.obtainMessage(HANDLER_SHOW_ERROR,mContext.getString(R.string.msg_error_exception)).sendToTarget();
 		}
 	};
 
@@ -122,8 +163,13 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.btn_left:
+			getHistoryData(addDay(mCalendar, -1));
 			break;
 		case R.id.btn_right:
+			getHistoryData(addDay(mCalendar, 1));
+			break;
+		case R.id.btn_retry:
+			getHistoryData(mCalendar);
 			break;
 
 		default:
@@ -171,7 +217,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 				setAccessStatus(false);
 				break;
 			case HANDLER_SHOW_ERROR:
-				
+				mtvMessage.setText((String)msg.obj);
+				mProgressBar.setVisibility(View.GONE);
+				mbtnRetry.setVisibility(View.VISIBLE);
 				break;
 
 			default:

@@ -4,16 +4,22 @@
     <string name="app_name">History Of Today</string>
     <string name="menu_about">About</string>
     <string name="more">More</string>
-    <string name="title_big_event">Big Event</string>
-    <string name="title_birth">出生</string>
-    <string name="title_die">近世</string>
+    <string name="title_big_event">BIG EVENT</string>
+    <string name="title_birth">BIRTH</string>
+    <string name="title_die">DIE</string>
     <string name="about">About</string>
     <string name="version">Version:</string>
     <string name="email">E-Mail:</string>
     <string name="email_content">kris@krislq.com</string>
-    <string name="design">Design by:</string>
+    <string name="design">Designed by:</string>
     <string name="design_content">Kris Lee</string>
+    <string name="web">Web:</string>
+    <string name="web_content">www.krislq.com</string>
     <string name="kris_on_mobile_develpment">www.krislq.com</string>
     <string name="msg_loading">loading for you ... </string>
+    <string name="date">%1$s-%2$s </string>
+    <string name="msg_error_exception">Sorry, Can not access the server.</string>
+    <string name="msg_error_json">Sorry, Can not parse the result.</string>
+    <string name="retry">Retry</string>
 
 </resources>

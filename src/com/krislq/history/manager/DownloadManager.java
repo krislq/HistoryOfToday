@@ -361,15 +361,12 @@ public class DownloadManager {
 	 * then start a new thread if the manager status is normal
 	 * @param url
 	 */
-	private void removeThread(String url)
-	{
+	private void removeThread(String url) {
 		L.e("removeThread:"+url);
 		threadMap.remove(url);
 		removeUrl(url);
-		synchronized(peddingList)
-		{
-			if(peddingList.size() >0 && status == STATUS_NORMAL)//如果有等待的线程，则�?��
-			{
+		synchronized(peddingList) {
+			if(peddingList.size() >0 && status == STATUS_NORMAL) {
 				L.v("DownloadManager#pending size:"+peddingList.size());
 				String pUrl = peddingList.get(0);
 				DownLoadThread thread = new DownLoadThread(pUrl);
@@ -381,8 +378,7 @@ public class DownloadManager {
 				//remove the url from the pending list
 				peddingList.remove(0);
 			}
-			else
-			{
+			else {
 				L.v("DownloadManager#no pending list");
 			}
 		}
@@ -392,8 +388,7 @@ public class DownloadManager {
 	 * @param imageView
 	 * @param resource
 	 */
-	private void decodeFromResource(final ImageView imageView,final int resource)
-	{
+	private void decodeFromResource(final ImageView imageView,final int resource) {
 		ThreadPoolUtil.execute(new Runnable() {
 			
 			@Override
@@ -404,15 +399,13 @@ public class DownloadManager {
 			}
 		});
 	}
-	private void setImage(final ImageView imageView,final Bitmap bitmap)
-	{
-		if(handler!=null)
-		{
+	private void setImage(final ImageView imageView,final Bitmap bitmap) {
+		if(handler!=null) {
 			handler.post(new Runnable() {
-				
 				@Override
 				public void run() {
 					imageView.setImageBitmap(bitmap);
+					imageView.requestLayout();
 				}
 			});
 		}
@@ -420,7 +413,6 @@ public class DownloadManager {
 	private void decodeFromFile(final ImageView imageView,final String path,final String url)
 	{
 		ThreadPoolUtil.execute(new Runnable() {
-			
 			@Override
 			public void run() {
 				final Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -538,23 +530,24 @@ public class DownloadManager {
 				}
 			}
 		}
-		private void notifyView(final String url,final Bitmap bitmap)
-		{
+		private void notifyView(final String url,final Bitmap bitmap) {
 			Set<ImageView> set = downloadMaps.get(url);
-			if(set == null)
-			{
+			if(set == null) {
+				L.e("download Set<ImageView> is null");
 				return;
 			}
 			Iterator<ImageView> iterator =  set.iterator();
 			while (iterator.hasNext()) {
+				L.e("while Notify image View:"+url);
 				final ImageView view = iterator.next();
-				view.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						view.setImageBitmap(bitmap);
-					}
-				});
+				setImage(view, bitmap);
+//				view.post(new Runnable() {
+//					@Override
+//					public void run() {
+//						L.e("Notify image View:"+url);
+//						view.setImageBitmap(bitmap);
+//					}
+//				});
 			}
 		}
 	}

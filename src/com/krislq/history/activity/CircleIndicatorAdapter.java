@@ -4,21 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.taptwo.android.widget.TitleProvider;
-
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.krislq.history.R;
 import com.krislq.history.json.ContentJson;
-import com.krislq.history.json.ListEventJson;
 import com.krislq.history.manager.DownloadManager;
 
 
@@ -65,16 +60,22 @@ public class CircleIndicatorAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder = null;
 		convertView = viewMap.get(position);
+		ContentJson content = contents.get(position);
 		if(convertView == null) {
-			ContentJson content = contents.get(position);
+			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.self_event_item, null);
-			ImageView imageView = (ImageView)convertView.findViewById(R.id.im_self_ecent_image);
 			TextView titleView = (TextView)convertView.findViewById(R.id.tv_self_event_title);
 			titleView.setText(content.getTitle());
-			mDownloadManager.add(content.getPicUrl(), imageView, R.drawable.bordor);
+			holder.imageView = (ImageView)convertView.findViewById(R.id.im_self_ecent_image);
+			convertView.setTag(holder);
 			viewMap.put(position, convertView);
 		}
+		else {
+			holder = (ViewHolder)convertView.getTag();
+		}
+		mDownloadManager.add(content.getPicUrl(), holder.imageView, R.drawable.default_image);
 		return convertView;
 	}
 
@@ -82,5 +83,18 @@ public class CircleIndicatorAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		return contents == null ?0 :contents.size();
+	}
+	
+	class ViewHolder {
+		ImageView imageView;
+
+		public ImageView getImageView() {
+			return imageView;
+		}
+
+		public void setImageView(ImageView imageView) {
+			this.imageView = imageView;
+		}
+		
 	}
 }

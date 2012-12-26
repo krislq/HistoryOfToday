@@ -3,17 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_repeat" >
-
     <Button
         android:id="@+id/btn_left"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
+        android:drawableLeft="@drawable/ic_left"
+        android:background="@drawable/btn_bg"
         android:layout_centerVertical="true"
-        android:background="@drawable/left"
         android:textColor="#fff"
-        android:text="Left"/>
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"/>
 
+    
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -23,15 +25,17 @@
         android:textColor="#fff"
         android:textStyle="bold"
         android:textSize="22sp"
-        android:text="Come on " />
-	
+        android:text="@string/app_name" />
     <Button
         android:id="@+id/btn_right"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="fill_parent"
         android:textColor="#fff"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:background="@drawable/btn_bg"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/right"
-        android:text="Right"/>
+        android:drawableRight="@drawable/ic_right"/>
+    
 </RelativeLayout>

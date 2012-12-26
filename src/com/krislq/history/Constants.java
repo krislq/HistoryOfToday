@@ -6,7 +6,7 @@ import com.krislq.history.util.HistoryUtil;
 
 public class Constants {
 
-	public static 	 	String  APP_NAME				= "ToolsBox";
+	public static 	 	String  APP_NAME				= "HistoryOfToday";
 	public static  		int 	VERSION_CODE		= 0;
 	public static 		String  VERSION_NAME		= null;
 	public static 		String  PACKAGE_NAME		= null;

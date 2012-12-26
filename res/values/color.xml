@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<resources>
+      <color name="transparent_background">#00000000</color>
+      <!-- 注意：color.xml的#5000000前两位是透明的效果参数从00->99（透明->不怎么透明），后6位是颜色的设置 -->
+      
+      <color name="white">#aa267490</color>
+      
+</resources>
+
+
