@@ -353,8 +353,6 @@ public class HttpUtil {
 		String key = null;
 		while (iterator.hasNext()) {
 			key = iterator.next();
-			int index = url.indexOf(key);
-			L.p("Key:" + key + "#index:" + index);
 			url = url.replace(key, specCharactersMap.get(key));
 		}
 		return url;
