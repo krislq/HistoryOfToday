@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.krislq.history.AppConfigs;
 import com.krislq.history.Constants;
 import com.krislq.history.R;
 import com.krislq.history.manager.PreferenceManager;
@@ -27,8 +28,13 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
+		if(!AppConfigs.init)
+		{
+			//init the configure information
+			AppConfigs.initConfig(mContext);
+		}
 		mPrefereceManager = new PreferenceManager(mContext);
-		MobclickAgent.setDebugMode(Constants.DEBUG);
+		MobclickAgent.setDebugMode(AppConfigs.isDebug());
 		MobclickAgent.onError(this);
 	}
 

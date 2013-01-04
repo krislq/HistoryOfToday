@@ -6,7 +6,9 @@ import java.io.RandomAccessFile;
 
 import android.util.Log;
 
+import com.krislq.history.AppConfigs;
 import com.krislq.history.Constants;
+import com.krislq.history.Constants.AppConfig;
 
 /**
  * 
@@ -71,31 +73,33 @@ public class L {
 		}
 		switch (level) {
 		case Log.VERBOSE:
-			if(Constants.DEBUG)
+			if(AppConfigs.isDebug())
 			{
 				Log.v(TAG, text);
 			}
 			break;
 		case Log.DEBUG:
-			if(Constants.DEBUG)
-			{
+			if(AppConfigs.isDebug()) {
 				Log.d(TAG, text);
 			}
 			break;
 		case Log.INFO:
-			if(Constants.DEBUG)
-			{
+			if(AppConfigs.isDebug()) {
 				Log.i(TAG, text);
 			}
 			break;
 		case Log.WARN:
-			Log.w(TAG, text);
+			if(AppConfigs.isDebug()) {
+				Log.w(TAG, text);
+			}
 			break;
 		case Log.ERROR:
-			Log.e(TAG, text);
+			if(AppConfigs.isDebug()) {
+				Log.e(TAG, text);
+			}
 			break;
 		}
-		if(Constants.PERSIST_LOG)
+		if(AppConfigs.isPersistLog())
 		{
 			writeLog(text, level);
 		}
