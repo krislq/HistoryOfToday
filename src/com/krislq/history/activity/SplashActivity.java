@@ -1,5 +1,6 @@
 package com.krislq.history.activity;
 
+import net.youmi.android.AdManager;
 import net.youmi.android.spot.SpotManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,11 +26,19 @@ public class SplashActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash);
+        //友盟事件
 		MobclickAgent.onEvent(mContext, "Start", "SplashActivity");
+		//友盟的通知机制 
 		UMFeedbackService.enableNewReplyNotification(this, NotificationType.NotificationBar);
 		UmengUpdateAgent.update(this);
-		setContentView(R.layout.splash);
-		SpotManager.getInstance(this).loadSpotAds();
+		//有米初始化
+        AdManager.getInstance(this).init("7f738b41c9cac277 ","b8d621c7e1349c9f", false);
+        //调用以下接口关闭有米广告SDK相关的log
+        AdManager.getInstance(this).setEnableDebugLog(false);
+		//加载有米弹窗广告
+        SpotManager.getInstance(this).loadSpotAds();
+        //显示有米弹窗广告
         SpotManager.getInstance(this).showSpotAds(this);
 		ThreadPoolUtil.execute(new Runnable() {
 			@Override

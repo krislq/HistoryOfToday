@@ -88,7 +88,6 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.onEvent(mContext, "Start", "HistoryActivity");
-		AdManager.getInstance(this).init("7f738b41c9cac277 ","b8d621c7e1349c9f", false);
         // 如果使用积分广告，请务必调用积分广告的初始化接口:
         OffersManager.getInstance(this).onAppLaunch();
 		mObjectMapper = new ObjectMapper();
