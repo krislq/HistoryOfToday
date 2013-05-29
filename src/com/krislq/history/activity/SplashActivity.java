@@ -32,7 +32,6 @@ public class SplashActivity extends BaseActivity {
 		SpotManager.getInstance(this).loadSpotAds();
         SpotManager.getInstance(this).showSpotAds(this);
 		ThreadPoolUtil.execute(new Runnable() {
-			
 			@Override
 			public void run() {
 				Constants.PACKAGE_NAME = HistoryUtil.getPackageName(mContext);
