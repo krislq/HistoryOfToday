@@ -4,9 +4,12 @@
         android:id="@+id/menu_about"
         android:orderInCategory="100"
         android:title="@string/menu_about"/>
-
     <item
         android:id="@+id/menu_feedback"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/menu_feedback"/>
+    <item
+        android:id="@+id/menu_offer"
+        android:orderInCategory="102"
+        android:title="@string/menu_offer"/>
 </menu>

@@ -1,5 +1,6 @@
 package com.krislq.history.activity;
 
+import net.youmi.android.spot.SpotManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -28,13 +29,15 @@ public class SplashActivity extends BaseActivity {
 		UMFeedbackService.enableNewReplyNotification(this, NotificationType.NotificationBar);
 		UmengUpdateAgent.update(this);
 		setContentView(R.layout.splash);
+		SpotManager.getInstance(this).loadSpotAds();
+        SpotManager.getInstance(this).showSpotAds(this);
 		ThreadPoolUtil.execute(new Runnable() {
 			
 			@Override
 			public void run() {
 				Constants.PACKAGE_NAME = HistoryUtil.getPackageName(mContext);
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(3000);
 				} catch (InterruptedException e) {
 				}
 				Intent intent = new Intent(SplashActivity.this,HistoryActivity.class);

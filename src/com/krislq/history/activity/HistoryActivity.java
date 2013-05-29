@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.youmi.android.AdManager;
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
+import net.youmi.android.offers.OffersManager;
+import net.youmi.android.offers.PointsManager;
+import net.youmi.android.spot.SpotManager;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -84,6 +89,8 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		MobclickAgent.onEvent(mContext, "Start", "HistoryActivity");
 		AdManager.getInstance(this).init("7f738b41c9cac277 ","b8d621c7e1349c9f", false);
+        // 如果使用积分广告，请务必调用积分广告的初始化接口:
+        OffersManager.getInstance(this).onAppLaunch();
 		mObjectMapper = new ObjectMapper();
 		mHandler = new UIHandler();
 		mCalendar = Calendar.getInstance();
@@ -107,9 +114,22 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		mViewFlowListEvent = (ViewFlow)findViewById(R.id.viewflow_list_event);
 		mCircleFlowIndicator = (CircleFlowIndicator)findViewById(R.id.circle_flow_indicato);
 		mTitleFlowIndicator = (TitleFlowIndicator)findViewById(R.id.title_flow_indicator);
+
+        // 将广告条adView添加到需要展示的layout控件中
+        LinearLayout adLayout = (LinearLayout) findViewById(R.id.adLayout);
+        AdView adView = new AdView(this, AdSize.SIZE_320x50);
+        adLayout.addView(adView);
 		//get today
 		getHistoryData(mCalendar);
 	}
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        // 如果使用积分广告，请务必调用积分广告的初始化接口:
+        OffersManager.getInstance(this).onAppExit();
+    }
 
 	private void setAccessStatus(boolean isLoading) {
 		if(isLoading) {
@@ -254,6 +274,9 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 		case R.id.menu_feedback:
 			UMFeedbackService.openUmengFeedbackSDK(this);
 			break;
+		case R.id.menu_offer:
+		    OffersManager.getInstance(this).showOffersWall();
+		    break;
 		default:
 			break;
 		}
