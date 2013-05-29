@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.youmi.android.AdManager;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.taptwo.android.widget.CircleFlowIndicator;
@@ -81,6 +83,7 @@ public class HistoryActivity extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.onEvent(mContext, "Start", "HistoryActivity");
+		AdManager.getInstance(this).init("7f738b41c9cac277 ","b8d621c7e1349c9f", false);
 		mObjectMapper = new ObjectMapper();
 		mHandler = new UIHandler();
 		mCalendar = Calendar.getInstance();

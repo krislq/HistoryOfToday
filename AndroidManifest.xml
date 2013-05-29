@@ -46,8 +46,31 @@
 		    android:process=":DownloadingService" >
 		</service>
 
+		<activity
+	        android:name="net.youmi.android.AdBrowser"
+	        android:configChanges="keyboard|keyboardHidden|orientation"            
+	        android:theme="@android:style/Theme.Light.NoTitleBar" >
+	    </activity>
+	    <service
+	        android:name="net.youmi.android.AdService"
+	        android:exported="false" >
+	    </service>
+	    <receiver 
+	        android:name="net.youmi.android.AdReceiver" >
+	        <intent-filter>
+	            <action android:name="android.intent.action.PACKAGE_ADDED" />
+	            <data android:scheme="package" />
+	        </intent-filter>
+	    </receiver> 
+		<receiver
+	        android:name="net.youmi.android.offers.OffersReceiver"
+	        android:exported="false" >
+	    </receiver>
         <meta-data android:value="50db058152701506560001ab" android:name="UMENG_APPKEY"></meta-data>
 		<meta-data android:name="UMENG_CHANNEL" android:value="gfan" />
+		<meta-data android:name="YOUMI_CHANNEL"
+             android:value="gfan" >
+        </meta-data>
     </application>
 
 </manifest>
